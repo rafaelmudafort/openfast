@@ -1,11 +1,11 @@
-BeamDyn User Guide and Theory Manual
+BeamDyn User's Guide and Theory Manual
 ======================================
 
 .. only:: html
 
    This document offers a quick reference guide for the BeamDyn software
    program. It is intended to be used by the general user in combination
-   with other FAST manuals. The manual will be updated as new releases are
+   with other OpenFAST manuals. The manual will be updated as new releases are
    issued and as needed to provide further information on advancements or
    modifications to the software.
 

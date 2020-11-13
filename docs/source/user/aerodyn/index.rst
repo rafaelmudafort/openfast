@@ -1,4 +1,4 @@
-AeroDyn Users Guide and Theory Manual
+AeroDyn User's Guide and Theory Manual
 ======================================
 
 .. only:: html
