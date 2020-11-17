@@ -32,9 +32,14 @@ include_directories(
 
 set(testlist
     NWTC_Library_test_tools
+    test_tools
     test_NWTC_IO_CheckArgs
     test_NWTC_IO_FileInfo
     test_NWTC_RandomNumber
+    test_NWTC_GetWords
+    test_NWTC_ParseVar
+    test_NWTC_ParseAry
+    test_NWTC_ChkParseData
 )
 foreach(test ${testlist})
     set(test_dependency pfunit ${source_modulesdirectory}/${module_directory}/tests/${test}.F90)
