@@ -27,6 +27,18 @@ env:
 jobs:
   regression-tests-release:
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        toolchain: [intel, gnu]
+        include:
+          - toolchain: intel
+            prebuild: source /opt/intel/oneapi/compiler/latest/env/vars.sh
+            fortran_compiler: /opt/intel/oneapi/compiler/latest/linux/bin/intel64/ifort
+          - toolchain: gnu
+            prebuild: echo "Pass"
+            fortran_compiler: gfortran-10
+
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -42,14 +54,40 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy Bokeh==1.4
 
+      - name: Install Intel oneAPI
+        if: matrix.toolchain == 'intel'
+        run: |
+          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
+          echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+          sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/oneAPI.list" -o APT::Get::List-Cleanup="0"
+          echo intel-oneapi-compiler-fortran | sed "s/,/ /g" | xargs -n 1 apt-cache depends | tee depends.txt
+      - name: cache install
+        if: matrix.toolchain == 'intel'
+        id: cache-install
+        uses: actions/cache@v2
+        with:
+          path: |
+            /opt/intel/oneapi/compiler
+            !/opt/intel/oneapi/compiler/latest/linux/compiler/lib/ia32_lin
+            !/opt/intel/oneapi/compiler/latest/linux/bin/ia32
+            !/opt/intel/oneapi/compiler/latest/linux/lib/emu
+            !/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga
+          key: intel-oneapi-fortran
+      - name: install
+        if: matrix.toolchain == 'intel' && steps.cache-install.outputs.cache-hit != 'true'
+        run: 
+          sudo apt-get install -y intel-oneapi-compiler-fortran
+
       - name: Setup Workspace
         run: cmake -E make_directory ${{runner.workspace}}/build
       - name: Configure Build
         working-directory: ${{runner.workspace}}/build
         run: |
+          ${{ matrix.prebuild }}
           cmake \
             -DCMAKE_INSTALL_PREFIX:PATH=${{runner.workspace}}/install \
-            -DCMAKE_Fortran_COMPILER:STRING=${{env.FORTRAN_COMPILER}} \
+            -DCMAKE_Fortran_COMPILER:STRING=${{matrix.fortran_compiler}} \
             -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
             -DBUILD_TESTING:BOOL=ON \
             -DCTEST_PLOT_ERRORS:BOOL=ON \
@@ -57,7 +95,9 @@ jobs:
       - name: Build OpenFAST
         # if: contains(github.event.head_commit.message, 'Action - Test All') || contains(github.event.pull_request.labels.*.name, 'Action - Test All') 
         working-directory: ${{runner.workspace}}/build
-        run: cmake --build . --target install -- -j ${{env.NUM_PROCS}}
+        run: |
+          ${{ matrix.prebuild }}
+          cmake --build . --target install -- -j ${{env.NUM_PROCS}}
 
       - name: Run AeroDyn tests
         uses: ./.github/actions/tests-module-aerodyn
@@ -207,8 +247,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-        with:
-          submodules: recursive
       - name: Setup
         run: cmake -E make_directory ${{runner.workspace}}/build
       - name: Configure
