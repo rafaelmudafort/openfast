@@ -56,11 +56,13 @@ jobs:
       - name: Install Intel oneAPI
         if: matrix.toolchain == 'intel'
         run: |
-          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
-          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2023.PUB
-          echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+          cd /tmp
+          wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+          sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
           sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/oneAPI.list" -o APT::Get::List-Cleanup="0"
-          echo intel-oneapi-compiler-fortran | sed "s/,/ /g" | xargs -n 1 apt-cache depends | tee depends.txt
+          # echo intel-oneapi-compiler-fortran | sed "s/,/ /g" | xargs -n 1 apt-cache depends | tee depends.txt
       - name: cache install
         if: matrix.toolchain == 'intel'
         id: cache-install
@@ -72,12 +74,12 @@ jobs:
             !/opt/intel/oneapi/compiler/latest/linux/bin/ia32
             !/opt/intel/oneapi/compiler/latest/linux/lib/emu
             !/opt/intel/oneapi/compiler/latest/linux/lib/oclfpga
-          key: intel-oneapi-fortran
+            /opt/intel/oneapi/mkl
+          key: intel-oneapi-hpckit
       - name: install
         if: matrix.toolchain == 'intel' && steps.cache-install.outputs.cache-hit != 'true'
         run: 
-          sudo apt-get install -y intel-oneapi-compiler-fortran
-
+          sudo apt-get install -y intel-basekit intel-hpckit
       - name: Setup Workspace
         run: cmake -E make_directory ${{runner.workspace}}/build
       - name: Configure Build
