@@ -107,8 +107,8 @@ jobs:
         uses: ./.github/actions/tests-module-beamdyn
         with:
           test-target: regression
-      - name: Run HydroDyn tests
-        uses: ./.github/actions/tests-module-hydrodyn
+      # - name: Run HydroDyn tests
+      #   uses: ./.github/actions/tests-module-hydrodyn
       - name: Run SubDyn tests
         uses: ./.github/actions/tests-module-subdyn
       - name: Run OpenFAST tests
