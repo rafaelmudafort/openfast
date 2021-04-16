@@ -35,7 +35,7 @@ jobs:
             PREBUILD: source /opt/intel/oneapi/setvars.sh
             FORTRAN_COMPILER: /opt/intel/oneapi/compiler/latest/linux/bin/intel64/ifort
           - toolchain: gnu
-            PREBUILD: echo "Pass"
+            PREBUILD: export FC=gfortran-10 CC=gcc-10 GCC=g++-10
             FORTRAN_COMPILER: gfortran-10
 
     steps:
