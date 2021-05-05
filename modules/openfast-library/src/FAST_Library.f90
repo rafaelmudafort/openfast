@@ -244,7 +244,7 @@ subroutine FAST_Start(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, Err
       
 end subroutine FAST_Start
 !==================================================================================================================================
-subroutine FAST_Update(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, ErrStat_c, ErrMsg_c) BIND (C, NAME='FAST_Update')
+subroutine FAST_Update(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, EndSimulationEarly, ErrStat_c, ErrMsg_c) BIND (C, NAME='FAST_Update')
    IMPLICIT NONE
 #ifndef IMPLICIT_DLLEXPORT
 !DEC$ ATTRIBUTES DLLEXPORT :: FAST_Update
@@ -255,6 +255,7 @@ subroutine FAST_Update(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, Er
    INTEGER(C_INT),         INTENT(IN   ) :: NumOutputs_c      
    REAL(C_DOUBLE),         INTENT(IN   ) :: InputAry(NumInputs_c)
    REAL(C_DOUBLE),         INTENT(  OUT) :: OutputAry(NumOutputs_c)
+   LOGICAL(C_BOOL),        INTENT(  OUT) :: EndSimulationEarly
    INTEGER(C_INT),         INTENT(  OUT) :: ErrStat_c      
    CHARACTER(KIND=C_CHAR), INTENT(  OUT) :: ErrMsg_c(IntfStrLen)      
    
@@ -264,7 +265,8 @@ subroutine FAST_Update(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, Er
    INTEGER(IntKi)                        :: ErrStat2                                ! Error status
    CHARACTER(IntfStrLen-1)               :: ErrMsg2                                 ! Error message  (this needs to be static so that it will print in Matlab's mex library)
                  
-   
+   EndSimulationEarly = .FALSE.
+
    IF ( n_t_global > Turbine(iTurb)%p_FAST%n_TMax_m1 ) THEN !finish 
       
       ! we can't continue because we might over-step some arrays that are allocated to the size of the simulation
@@ -303,15 +305,16 @@ subroutine FAST_Update(iTurb, NumInputs_c, NumOutputs_c, InputAry, OutputAry, Er
          ErrMsg = TRIM(ErrMsg)//NewLine//TRIM(ErrMsg2)
       end if
       
-      
-      ! set the outputs for external code here...
-      ! return y_FAST%ChannelNames
+      IF ( Turbine(iTurb)%m_FAST%Lin%FoundSteady) THEN
+         EndSimulationEarly = .TRUE.
+      END IF
       
       ErrStat_c     = ErrStat
       ErrMsg        = TRIM(ErrMsg)//C_NULL_CHAR
       ErrMsg_c      = TRANSFER( ErrMsg//C_NULL_CHAR, ErrMsg_c )
    END IF
-   
+
+   ! set the outputs for external code here
    CALL FillOutputAry_T(Turbine(iTurb), Outputs)   
    OutputAry(1)              = Turbine(iTurb)%m_FAST%t_global 
    OutputAry(2:NumOutputs_c) = Outputs 
