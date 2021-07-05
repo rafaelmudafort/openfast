@@ -23,6 +23,7 @@ Details on the transition from FAST v8 to OpenFAST may be found in :numref:`fast
    inflowwind/index.rst
    servodyn/index.rst
    servodyn-stc/StC_index.rst
+   turbsim/index.rst
    fast_to_openfast.rst
    cppapi/index.rst
    fast.farm/index.rst
