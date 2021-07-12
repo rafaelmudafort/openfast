@@ -131,8 +131,11 @@ macro(set_fast_gfortran)
 
   # OPENMP
   if (OPENMP)
-     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fopenmp")
-     set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -fopenmp" )
+      find_package(OpenMP)
+      message("OpenMP_FOUND ${OpenMP_FOUND}")
+      message("OpenMP_Fortran_FOUND ${OpenMP_Fortran_FOUND}")
+      message("OpenMP_Fortran_FLAGS ${OpenMP_Fortran_FLAGS}")
+      message("CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS}")
   endif()
 
   check_f2008_features()
@@ -172,8 +175,13 @@ macro(set_fast_intel_fortran_posix)
 
   # OPENMP
   if (OPENMP)
-     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qopenmp")
-     set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -qopenmp" )
+    find_package(OpenMP)
+    message("OpenMP_FOUND ${OpenMP_FOUND}")
+    message("OpenMP_Fortran_FOUND ${OpenMP_Fortran_FOUND}")
+    message("OpenMP_Fortran_FLAGS ${OpenMP_Fortran_FLAGS}")
+    message("CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS}")
+    #  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -qopenmp")
+    #  set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -qopenmp" )
   endif()
 
   check_f2008_features()
@@ -226,6 +234,9 @@ macro(set_fast_intel_fortran_windows)
 
   # OPENMP
   if (OPENMP)
+    find(OpenMP REQUIRED)
+    message("OpenMP_FOUND ${OpenMP_FOUND}")
+
      set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /qopenmp")
      set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} /qopenmp" )
   endif()
