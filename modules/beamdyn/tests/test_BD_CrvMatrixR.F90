@@ -9,7 +9,7 @@ subroutine test_BD_CrvMatrixR()
     ! invalid wm parameters (if thats a thing)
     ! does the implemented WM formulation have any boundaries?
     
-    use pFUnit_mod
+    use FUnit
     use BeamDyn_Subs
     use NWTC_Num
     use test_tools

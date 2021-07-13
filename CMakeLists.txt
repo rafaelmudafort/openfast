@@ -166,7 +166,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenFASTConfig.cmake
 
 # Option configuration
 if(BUILD_TESTING)
-  include(CTest)
+  # include(CTest)
+  enable_testing()
 
   # regression tests
   add_subdirectory(reg_tests)

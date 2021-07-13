@@ -6,7 +6,7 @@ subroutine test_BD_GenerateGLL()
   ! - p = 6, even number
   ! - p = 97, large, prime number
       
-    use pFUnit_mod
+    use FUnit
     use BeamDyn_Subs
     use NWTC_Num
     use test_tools

@@ -14,20 +14,20 @@
 # limitations under the License.
 #
 
-set_source_files_properties(${pfunit_directory}/include/driver.F90 PROPERTIES GENERATED 1)
+# set_source_files_properties(${pfunit_directory}/include/driver.F90 PROPERTIES GENERATED 1)
 
-set(module_name "beamdyn")
-set(module_directory "beamdyn")
-set(module_library "beamdynlib")
+# set(module_name "beamdyn")
+# set(module_directory "beamdyn")
+# set(module_library "beamdynlib")
 
-file(MAKE_DIRECTORY ${build_testdirectory}/${module_directory})
-file(WRITE ${build_testdirectory}/${module_directory}/testSuites.inc "")
+# file(MAKE_DIRECTORY ${build_testdirectory}/${module_directory})
+# file(WRITE ${build_testdirectory}/${module_directory}/testSuites.inc "")
 
-include_directories(
-  ${PROJECT_SOURCE_DIR}
-  ${pfunit_directory}/mod
-  ${build_testdirectory}/${module_directory}
-)
+# include_directories(
+# #   ${PROJECT_SOURCE_DIR}
+# #   ${pfunit_directory}/mod
+#   ${build_testdirectory}/${module_directory}
+# )
 
 set(testlist
     test_tools
@@ -51,30 +51,37 @@ set(testlist
     test_BD_TrapezoidalPointWeight
     test_InitializeNodalLocations
 )
-foreach(test ${testlist})
-    set(test_dependency pfunit ${source_modulesdirectory}/${module_directory}/tests/${test}.F90)
-    add_custom_command(
-        OUTPUT ${build_testdirectory}/${module_directory}/${test}.F90
-        COMMAND ${PYTHON_EXECUTABLE} ${pfunit_directory}/bin/pFUnitParser.py ${source_modulesdirectory}/${module_directory}/tests/${test}.F90 ${build_testdirectory}/${module_directory}/${test}.F90
-        DEPENDS ${test_dependency}
-    )
-    set(test_sources ${test_sources} ${build_testdirectory}/${module_directory}/${test}.F90)
-    file(APPEND ${build_testdirectory}/${module_directory}/testSuites.inc "ADD_TEST_SUITE(${test}_suite)\n")
-endforeach()
+# foreach(test ${testlist})
+#     set(test_dependency funit ${source_modulesdirectory}/${module_directory}/tests/${test}.F90)
+#     add_custom_command(
+#         OUTPUT ${build_testdirectory}/${module_directory}/${test}.F90
+#         COMMAND ${PYTHON_EXECUTABLE} ${pfunit_directory}/bin/funitproc ${source_modulesdirectory}/${module_directory}/tests/${test}.F90 ${build_testdirectory}/${module_directory}/${test}.F90
+#         DEPENDS ${test_dependency}
+#     )
+#     set(test_sources ${test_sources} ${build_testdirectory}/${module_directory}/${test}.F90)
+#     file(APPEND ${build_testdirectory}/${module_directory}/testSuites.inc "ADD_TEST_SUITE(${test}_suite)\n")
+# endforeach()
   
-add_executable(
-    ${module_name}_utest
-    ${pfunit_directory}/include/driver.F90
-    ${test_sources}
-)
+# add_executable(
+#     ${module_name}_utest
+#     ${pfunit_directory}/include/driver.F90
+#     ${test_sources}
+# )
 
-target_link_libraries(
-    ${module_name}_utest
-    ${pfunit_directory}${pfunit_lib}
-    ${module_library}
-)
+# target_link_libraries(
+#     ${module_name}_utest
+#     # ${pfunit_directory}${pfunit_lib}
+#     ${pfunit_directory}${funit_lib}
+#     ${module_library}
+# )
 
-add_test(
-    ${module_name}_utest
-    ${PROJECT_BINARY_DIR}/${module_directory}/${module_name}_utest
-)
+# add_test(
+#     ${module_name}_utest
+#     ${PROJECT_BINARY_DIR}/${module_directory}/${module_name}_utest
+# )
+
+# add_pfunit_ctest(
+#   beamdyn_utest
+#   TEST_SOURCES ${testlist}
+#   LINK_LIBRARIES beamdynlib
+# )

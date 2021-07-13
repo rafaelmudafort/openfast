@@ -4,7 +4,7 @@ subroutine test_BD_CheckRotMat()
     ! - known valid rotation matrix: pi about x-axis
     ! - known invalid rotation matrix: halve the angle of the diagonal elements
 
-    use pFUnit_mod
+    use FUnit
     use BeamDyn_Subs
     use NWTC_Num
     use test_tools

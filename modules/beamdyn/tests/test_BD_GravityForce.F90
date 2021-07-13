@@ -1,7 +1,7 @@
 @test
 subroutine test_BD_GravityForce()
     
-    use pFUnit_mod
+    use FUnit
     use BeamDyn
     use NWTC_Num
     use test_tools

@@ -13,7 +13,7 @@ subroutine test_BD_InputGlobalLocal()
     ! Verify the DCM is transposed
     !! u%RootMotion%Orientation(:,:,1)
         
-    use pFUnit_mod
+    use FUnit
     use BeamDyn
     use NWTC_Num
     use test_tools

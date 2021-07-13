@@ -3,7 +3,7 @@ module test_BD_MemberEta
     ! tests routine that calculates the length of the beam's reference line
     ! also finds element boundaries in eta coordinates
 
-    use pFUnit_mod
+    use FUnit
     use BeamDyn
     use NWTC_Num
     use test_tools

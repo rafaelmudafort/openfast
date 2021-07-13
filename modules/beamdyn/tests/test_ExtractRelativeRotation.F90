@@ -2,7 +2,7 @@
 subroutine test_ExtractRelativeRotation()
     ! this is actually an integration test not a unit test...
 
-    use pFUnit_mod
+    use FUnit
     use BeamDyn_Subs
     use NWTC_Num
     use test_tools

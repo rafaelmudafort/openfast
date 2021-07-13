@@ -40,7 +40,7 @@ foreach(test ${testlist})
     set(test_dependency pfunit ${source_modulesdirectory}/${module_directory}/tests/${test}.F90)
     add_custom_command(
         OUTPUT ${build_testdirectory}/${module_directory}/${test}.F90
-        COMMAND ${PYTHON_EXECUTABLE} ${pfunit_directory}/bin/pFUnitParser.py ${source_modulesdirectory}/${module_directory}/tests/${test}.F90 ${build_testdirectory}/${module_directory}/${test}.F90
+        COMMAND ${PYTHON_EXECUTABLE} ${pfunit_directory}/PFUNIT-4.1/bin/funitproc ${source_modulesdirectory}/${module_directory}/tests/${test}.F90 ${build_testdirectory}/${module_directory}/${test}.F90
         DEPENDS ${test_dependency}
     )
     set(test_sources ${test_sources} ${build_testdirectory}/${module_directory}/${test}.F90)

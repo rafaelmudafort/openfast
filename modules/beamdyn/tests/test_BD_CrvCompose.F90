@@ -8,7 +8,7 @@ subroutine test_BD_CrvCompose()
     ! - flag = 2
     ! - flag = 3
     
-    use pFUnit_mod
+    use FUnit
     use BeamDyn_Subs
     use NWTC_Num
     use test_tools

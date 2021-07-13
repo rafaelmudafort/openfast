@@ -3,7 +3,7 @@ subroutine test_BD_DistrLoadCopy()
     ! branches to test
     ! - the 2D array is correctly stored in the 3D array
     
-    use pFUnit_mod
+    use FUnit
     use BeamDyn
     use NWTC_Num
     use test_tools
